@@ -1,4 +1,4 @@
-## Even vs Odd Zeta Subsequences: Concise README
+## Even vs Odd Zeta Subsequences: Arithmetic Symmetry and Spectral Compressibility
 
 ### Scope
 Neutral summary of the parity split of \(\sum 1/n^2\) and the FFT-based measurements implemented here. 
