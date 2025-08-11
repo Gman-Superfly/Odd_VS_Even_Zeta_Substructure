@@ -65,6 +65,27 @@ We empirically link arithmetic symmetry (e.g., the p=2 Euler factor) to algorith
 - Edge/embedded: same on‑device budget yields higher quality, or same quality at lower power.
 - Training/inference: smaller Fourier feature sets reduce memory and FLOPs.
 
+### How to use this finding (playbook)
+- **Decide if your stream is parity/residue masked**: even/odd branches, checkerboard masks, stride‑2/dilation, polyphase splits, or bucketing by index mod q → treat the masked branch as “odd‑like” if it excludes even indices or removes the `p=2` factor.
+- **Feature/compression budget (Fourier/DCT features or top‑M storage)**:
+  - If you tuned an even‑like branch to `M_even`, provision the odd‑like branch as `M_odd = ceil(1.07 × M_even)`.
+  - With proportional budgets, if even uses `fraction_even` of rFFT bins, start with `fraction_odd ≈ 1.07 × fraction_even` (cap at 1.0) and refine via the CSV logs below.
+  - If compute is fixed (same `M`), expect odd‑like relative error to be ≈ 1.05–1.15× higher at moderate `M`.
+- **Model capacity (two masked branches)**: give the odd‑like branch ~5–10% more channels/coefficients or a small residual adapter to equalize accuracy.
+- **Mask choice (you control the pipeline)**: prefer smaller period `q` masks (esp. `q=2`) for higher spectral compactness. Avoid odd‑only gating if fidelity at tight budgets is critical.
+- **Capacity planning with the provided scripts (Windows PowerShell)**:
+  - Size minimum modes for a target error ε at your length `L`:
+    ```powershell
+    python .\test_min_modes.py --lengths 8192 --eps 1e-1,3e-2
+    ```
+    Use the returned `M_even`/`M_odd`; if you only have `M_even`, set `M_odd ≈ ceil(1.07 × M_even)` as a first pass.
+  - Quick spectral‑entropy check (odd typically needs ~7% more effective modes):
+    ```powershell
+    $env:PYTHONIOENCODING='utf-8'; [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new(); python -c "import even_odd_zeta_fft as m; m.spectral_metrics(L_list=(1024,2048,4096))"
+    ```
+  - Proportional budget sizing: run the proportional sweep and read the emitted CSV `results_compressibility_proportional_*.csv` to pick `fraction` that meets ε for even; multiply by ~1.07 for odd as a starting point, then confirm.
+
+
 ### Asymptotics and fixed‑budget divergence
 In this section, “incompressible” means: under a fixed top‑M Fourier budget, the relative L2 error approaches 1 as L→∞.
 - Fixed M, L→∞: error → 1. Basis/window change constants but not this fact or the even<odd ordering at finite L.

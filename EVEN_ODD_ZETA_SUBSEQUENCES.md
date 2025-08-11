@@ -157,6 +157,26 @@ Additional metrics:
 - Telemetry/analytics (mod‑q bucketing): prefer smaller period q (esp. 2) for compressible aggregates; odd‑only buckets are modestly costlier at equal fidelity.
 - Rule of thumb: arithmetic symmetry → spectral compactness; budget ~5–10% extra for odd‑like masks to match even‑like quality.
 
+### How to use this finding (playbook)
+- **Identify masking**: If your data/pipeline uses parity or residue masks (checkerboard, stride‑2/dilation, polyphase, mod‑q bucketing), treat branches that exclude even indices as “odd‑like.” Smaller period q ⇒ more compact spectra.
+- **Feature/compression budget (FFT/DCT or top‑M storage)**:
+  - If even is tuned to `M_even`, start odd at `M_odd = ceil(1.07 × M_even)` and validate.
+  - With proportional budgets, if even uses `fraction_even` of rFFT bins, start odd at `fraction_odd ≈ 1.07 × fraction_even` (clip at 1.0), then confirm via CSV.
+  - Fixed compute (same M): expect odd error ≈ 1.05–1.15× even at moderate M.
+- **Model capacity (two masked branches)**: give the odd‑like branch ~5–10% more channels/coefficients or add a small adapter to equalize accuracy.
+- **Pipeline choice**: prefer small‑q masks (esp. q=2) when you can; avoid odd‑only gating for tight budgets if fidelity must hold.
+- **Windows PowerShell sizing**:
+  - Minimum‑modes for ε at length L:
+    ```powershell
+    python .\test_min_modes.py --lengths 8192 --eps 1e-1,3e-2
+    ```
+    Use returned `M_even`/`M_odd`; if only `M_even` is measured, `M_odd ≈ ceil(1.07 × M_even)` is a solid first pass.
+  - Quick spectral‑entropy check (odd typically needs ~7% more effective modes):
+    ```powershell
+    $env:PYTHONIOENCODING='utf-8'; [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new(); python -c "import even_odd_zeta_fft as m; m.spectral_metrics(L_list=(1024,2048,4096))"
+    ```
+  - Proportional budget: run proportional sweeps; pick `fraction` for even from the CSV `results_compressibility_proportional_*.csv`, then start odd at ~1.07× that fraction and re‑check.
+
 #### Cost impact at scale
 - Storage/bandwidth: ~7% fewer bins for even‑like masks at the same error → lower data footprint and network usage.
 - Compute: ~7% fewer coefficients to compute/sort/transmit → reduced CPU/GPU cycles and energy.
