@@ -112,6 +112,8 @@ print(err_o/err_e)
 - For ζ(2), proportional runs consistently show odd subsequences require more modes than even for the same relative error (typically a few percent for the shown fractions). This gap persists across L and transforms (rFFT vs DCT-II), aligning with the Euler factor (1-2^{-s}). Fixed-ε tests (minimal M for target ε) reproduce the same ordering; at very small ε, both sequences saturate to nearly all bins so ratios approach 1.
 
 ### ML Applications
+To be added with the experiments from Aug...
+
 ### Scope & Caveats
 - We stay within Fourier-type compressibility of zeta-derived sequences under arithmetic masks. We do not claim complexity separations.
 - Reported “few percent” gaps depend on ε/M, L, basis/window, and preprocessing; the sign and stability of the gap are robust, while exact numbers vary.
