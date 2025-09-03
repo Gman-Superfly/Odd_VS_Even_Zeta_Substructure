@@ -2,7 +2,15 @@
 
 [extended from original tests]
 
-### Overview
+Even vs Odd Zeta Subsequences: Arithmetic Symmetry and Spectral Compressibility
+Scope
+
+Neutral summary of the parity split of (\sum 1/n^2) and the FFT-based measurements implemented here.
+Introduction
+
+We experiment with compressable sequences, link arithmetic symmetry (e.g., the p=2 Euler factor) to algorithmic compressibility under Fourier-type bases. Using the even/odd subsequences of the Basel series 1/n^2 as a canonical case, we show that the even subsequence is consistently more FFT‑compressible than the odd subsequence under matched budgets, we show that the bins needed for odd are ~7% more than even (read notes about the 7% claim).
+
+### Overview Big Fluff
 This repository studies arithmetic symmetry in zeta Dirichlet subsequences and its effect on spectral compressibility under Fourier-type transforms. Empirically, the odd subsequence of ζ(2) incurs a ~7% compressibility penalty versus the even subsequence at matched budgets. We generalize to ζ(s) for real s>1 and complex s, residue classes mod q, and provide CPU/GPU (optional torch) implementations.
 
 ### Motivation & Goals
