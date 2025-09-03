@@ -1,7 +1,5 @@
 ## Even vs Odd Zeta Subsequences: Concise Summary and Fun Explorations
 
-[techinically this is from the old tests achived in fluff folder however I need it here for my sanity at the moment]
-
 ### Scope
 Brief, neutral summary of the parity split of \(\sum 1/n^2\) and the FFT-based measurements implemented in `even_odd_zeta_fft.py`. Focus: what is computed, how to run, what is output.
 

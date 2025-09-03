@@ -55,3 +55,6 @@ htmlcov/
 
 
 ATTENTION_TOPM_SPARSIFICATION_TESTS.md
+
+uv.lock
+pyproject.toml

@@ -1,0 +1,5 @@
+Min modes M for target relative error eps (energy criterion)
+Settings: remove_dc=False
+L=1024  eps=1e-01: M_even= 505 M_odd= 507 ratio=1.0040  eps=3e-02: M_even= 513 M_odd= 513 ratio=1.0000
+L=2048  eps=1e-01: M_even=1009 M_odd=1013 ratio=1.0040  eps=3e-02: M_even=1024 M_odd=1024 ratio=1.0000
+L=4096  eps=1e-01: M_even=2017 M_odd=2025 ratio=1.0040  eps=3e-02: M_even=2047 M_odd=2047 ratio=1.0000

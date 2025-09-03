@@ -61,7 +61,7 @@ def main() -> int:
             M_odd = m.min_modes_for_error(seq_odd, eps)
             ratio = (M_odd / M_even) if M_even > 0 else float("inf")
             line.append(
-                f"eps={eps:.0e}: M_even={M_even:4d} M_odd={M_odd:4d} ratio={ratio:.4f}"
+                f"eps={eps:.0e}: M_even={M_even:4d} M_odd={M_odd:4d} ratio={ratio:.2f}"
             )
         print("  ".join(line))
 
